@@ -145,7 +145,7 @@
         
         .galeria.show {
             opacity: 1;
-            max-height: none;
+            max-height: auto;
         }
         
         .foto-card {
@@ -186,7 +186,9 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             .galeria {
-                grid-template-columns: repeat(2, 1fr);
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
             }
             h1 {
                 font-size: 1.7rem;
