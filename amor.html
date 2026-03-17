@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuestro Tiempo Juntos</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .screen {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 35px 25px;
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            color: white;
+            transition: all 0.5s ease;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        h1 {
+            font-size: 2.1rem;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .intro-img {
+            width: 220px;
+            max-width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn {
+            margin-top: 15px;
+            background: white;
+            color: #ff5f8f;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .heart {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            animation: latido 1s infinite;
+        }
+        
+        .subtext {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .timer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .box {
+            background: rgba(255, 255, 255, 0.22);
+            border-radius: 18px;
+            padding: 20px 10px;
+        }
+        
+        .number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .label {
+            margin-top: 8px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .date-start {
+            margin-top: 25px;
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+        
+        .mensaje-fotos {
+            margin-top: 20px;
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .mensaje-fotos.show {
+            opacity: 1;
+            max-height: 300px;
+        }
+        
+        .galeria {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s ease;
+        }
+        
+        .galeria.show {
+            opacity: 1;
+            max-height: 2000px;
+        }
+        
+        .foto-card {
+            background: rgba(255, 255, 255, 0.18);
+            padding: 8px;
+            border-radius: 18px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .foto-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 14px;
+            display: block;
+        }
+        
+        @keyframes latido {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.08);
+            }
+            50% {
+                transform: scale(1);
+            }
+            75% {
+                transform: scale(1.08);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .timer {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .galeria {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            h1 {
+                font-size: 1.7rem;
+            }
+            .number {
+                font-size: 1.6rem;
+            }
+            .intro-img {
+                width: 180px;
+                height: 180px;
+            }
+            .foto-card img {
+                height: 220px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .galeria {
+                grid-template-columns: 1fr;
+            }
+            .foto-card img {
+                height: 260px;
+            }
+        }
+    </style>
+</head>
+<audio id="musica" loop>
+    <source src="cancion-amor.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio HTML5.
+</audio>
+
+<body>
+
+    <div class="screen" id="introScreen">
+        <div class="heart">❤️</div>
+        <h1>¿Quieres saber cuánto tiempo vamos?</h1>
+        <img src="foto-juntos.png" alt="Nuestra foto" class="intro-img">
+        <button class="btn" onclick="mostrarContador()">Siguiente</button>
+    </div>
+
+    <div class="screen hidden" id="counterScreen">
+        <div class="heart">❤️</div>
+        <h1>Tú y yo</h1>
+        <p class="subtext">Este es el tiempo que llevamos juntos</p>
+
+        <div class="timer">
+            <div class="box">
+                <div class="number" id="days">0</div>
+                <div class="label">Días</div>
+            </div>
+            <div class="box">
+                <div class="number" id="hours">0</div>
+                <div class="label">Horas</div>
+            </div>
+            <div class="box">
+                <div class="number" id="minutes">0</div>
+                <div class="label">Minutos</div>
+            </div>
+            <div class="box">
+                <div class="number" id="seconds">0</div>
+                <div class="label">Segundos</div>
+            </div>
+        </div>
+
+        <p class="date-start" id="dateStart"></p>
+
+        <button class="btn" onclick="mostrarFotos()">📸 Nuestras fotos</button>
+
+        <p id="mensajeFotos" class="mensaje-fotos">
+            Estas son nuestras fotos juntos hasta ahora... muchas más vendrán con el tiempo y el amor que nos tenemos ❤️
+        </p>
+
+        <div id="galeriaFotos" class="galeria">
+            <div class="foto-card">
+                <img src="foto1.jpeg" alt="Foto 1">
+            </div>
+            <div class="foto-card">
+                <img src="foto2.jpeg" alt="Foto 2">
+            </div>
+            <div class="foto-card">
+                <img src="foto3.jpeg" alt="Foto 3">
+            </div>
+            <div class="foto-card">
+                <img src="foto4.jpeg" alt="Foto 4">
+            </div>
+            <div class="foto-card">
+                <img src="foto5.jpeg" alt="Foto 5">
+            </div>
+            <div class="foto-card">
+                <img src="foto6.jpeg" alt="Foto 6">
+            </div>
+            <div class="foto-card">
+                <img src="foto7.jpeg" alt="Foto 7">
+            </div>
+            <div class="foto-card">
+                <img src="foto8.jpeg" alt="Foto 8">
+            </div>
+            <div class="foto-card">
+                <img src="foto9.jpeg" alt="Foto 9">
+            </div>
+            <div class="foto-card">
+                <img src="foto10.jpeg" alt="Foto 10">
+            </div>
+            <div class="foto-card">
+                <img src="foto11.jpeg" alt="Foto 11">
+            </div>
+            <div class="foto-card">
+                <img src="foto12.jpeg" alt="Foto 12">
+            </div>
+            <div class="foto-card">
+                <img src="foto13.jpeg" alt="Foto 13">
+            </div>
+            <div class="foto-card">
+                <img src="foto14.jpeg" alt="Foto 14">
+            </div>
+            <div class="foto-card">
+                <img src="foto15.jpeg" alt="Foto 15">
+            </div>
+            <div class="foto-card">
+                <img src="foto16.jpeg" alt="Foto 16">
+            </div>
+            <div class="foto-card">
+                <img src="foto17.jpeg" alt="Foto 17">
+            </div>
+            <div class="foto-card">
+                <img src="foto18.jpeg" alt="Foto 18">
+            </div>
+            <div class="foto-card">
+                <img src="foto19.jpeg" alt="Foto 19">
+            </div>
+            <div class="foto-card">
+                <img src="foto20.jpeg" alt="Foto 20 ">
+            </div>
+            <div class="foto-card">
+                <img src="foto21.jpeg" alt="Foto 21">
+            </div>
+        </div>
+
+        <script>
+            const fechaInicio = new Date("2026-03-09T00:00:00");
+
+            const daysEl = document.getElementById("days");
+            const hoursEl = document.getElementById("hours");
+            const minutesEl = document.getElementById("minutes");
+            const secondsEl = document.getElementById("seconds");
+            const dateStartEl = document.getElementById("dateStart");
+
+            function mostrarContador() {
+                document.getElementById("introScreen").classList.add("hidden");
+                document.getElementById("counterScreen").classList.remove("hidden");
+
+                const audio = document.getElementById("musica");
+                audio.volume = 0.3; // volumen suave
+                audio.play().catch(error => {
+                    console.log("No se pudo reproducir la música automáticamente:", error);
+                });
+            }
+
+            const opcionesFecha = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            };
+
+            dateStartEl.textContent =
+                "Desde: " + fechaInicio.toLocaleDateString("es-ES", opcionesFecha);
+
+            function actualizarContador() {
+                const ahora = new Date();
+                const diferencia = ahora - fechaInicio;
+
+                if (diferencia < 0) {
+                    daysEl.textContent = "0";
+                    hoursEl.textContent = "00";
+                    minutesEl.textContent = "00";
+                    secondsEl.textContent = "00";
+                    return;
+                }
+
+                const totalSegundos = Math.floor(diferencia / 1000);
+
+                const dias = Math.floor(totalSegundos / (60 * 60 * 24));
+                const horas = Math.floor((totalSegundos % (60 * 60 * 24)) / (60 * 60));
+                const minutos = Math.floor((totalSegundos % (60 * 60)) / 60);
+                const segundos = totalSegundos % 60;
+
+                daysEl.textContent = dias;
+                hoursEl.textContent = String(horas).padStart(2, "0");
+                minutesEl.textContent = String(minutos).padStart(2, "0");
+                secondsEl.textContent = String(segundos).padStart(2, "0");
+            }
+
+            actualizarContador();
+            setInterval(actualizarContador, 1000);
+
+            function mostrarFotos() {
+                const mensaje = document.getElementById("mensajeFotos");
+                const galeria = document.getElementById("galeriaFotos");
+
+                mensaje.classList.toggle("show");
+                galeria.classList.toggle("show");
+            }
+        </script>
+</body>
+
+</html>
